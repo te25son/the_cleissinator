@@ -1,6 +1,6 @@
 <h1 align="center">The Cleissinator</h1>
 
-The Cleissinator was created to automate the tedious task of logging on and downloading files off of our client's platform. It is the first part of a two-part program that creates projects using folders located in the Cleissinator's `DOWNLOAD_DIR`. The two parts are connected through a SFTP.
+The Cleissinator is a command line program created to automate the tedious task of logging on and downloading files off of our client's platform. It is the first part of a two-part program that creates projects using folders located in the Cleissinator's `DOWNLOAD_DIR`. The two parts are connected through a SFTP.
 
 *This page documents the use of the first part only.*
 
