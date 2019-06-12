@@ -22,9 +22,9 @@ Your settings.py file should include the following variables to get the Cleissin
 
 * HOMEPATH
 * DOWNLOAD_DIR
-* LOGIN_CREDS
 * FOLDERNAME_DICT
 * TEST
+* LOGIN_CREDS
 
 #### HOMEPATH / DOWNLOAD_DIR
 `HOMEPATH` sets the base directory on top of which `DOWNLOAD_DIR` is built. It is not necessary, but you must specify the location where geckodriver will direct your downloaded files. Therefore, if you do not include it, you must make sure that `DOWNLOAD_DIR` represents the complete path to the folder on your computer where downloads will go.
@@ -53,3 +53,8 @@ FOLDERNAME_DICT = {
 │   ├───SUMERIAN-Rev
 ```
 
+#### TEST
+`TEST` is used to determine whether or not the browser will be displayed while the Cleissinator is running. If `TEST` is set to true, the browser will be displayed. This is to help see what exactly the program is doing to better understand where something went wrong in the event something does go wrong.
+
+#### LOGIN_CREDS
+This is another python dictionary that should include three keys: username, password, and url. The `LOGIN_CREDS` are used to access the client portal.
