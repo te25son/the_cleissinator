@@ -4,7 +4,7 @@ The Cleissinator is a command line program created to automate the tedious task 
 
 *This page documents the use of the first part only.*
 
-### Packages
+## Packages
 Package requirements can be found in the requirement.txt file. First make sure that pip is installed, and then simply call the command `pip install -r requirements.txt`. 
 
 The Cleissinator uses geckodriver as its default driver. The location of geckodriver.exe is specified in the project's main.py file when defining the driver's `executable_path` parameter:
@@ -58,3 +58,15 @@ FOLDERNAME_DICT = {
 
 #### LOGIN_CREDS
 This is another python dictionary that should include three keys: username, password, and url. The `LOGIN_CREDS` are used to access the client portal.
+
+## Running the Cleissinator
+
+To run the Cleissinator make sure that all requirements are included in your virtual environment and that you are running python 3.7 or later.
+
+To check whether you are running the correct version of python, run `python --version` in your command shell.
+
+Check your settings.py file to make sure your environment variables match the necessary information. **It is very important that your `DOWNLOAD_DIR` is in a location that you can access**. As well, check your `LOGIN_CREDS` to be sure they are correct. Geckodriver will not be able to open the portal if any of the credentials are misspelled or missing. 
+
+Once the above criteria are checked and met, direct your command tool to the root directory of the project and run `python main.py`.
+
+And congratulations! You've successfully run the Cleissinator :)
