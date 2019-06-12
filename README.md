@@ -1,27 +1,55 @@
-  ____ _      _         _             _             
- / ___| | ___(_)___ ___(_)_ __   __ _| |_ ___  _ __ 
-| |   | |/ _ \ / __/ __| | '_ \ / _` | __/ _ \| '__|
-| |___| |  __/ \__ \__ \ | | | | (_| | || (_) | |   
- \____|_|\___|_|___/___/_|_| |_|\__,_|\__\___/|_| 
+<h1 align="center">The Cleissinator</h1>
 
+The Cleissinator was created to automate the tedious task of logging on and downloading files off of our client's platform. It is the first part of a two-part program that creates projects using folders located in the Cleissinator's `DOWNLOAD_DIR`. The two parts are connected through a SFTP.
 
-The following is a list (in order) of the steps the Cleissinator takes to do its job.
+*This page documents the use of the first part only.*
 
-1. Removes all files/folders from download directory
-2. Repopulates download directory with empty folders
-3. Opens Cleiss platform
-4. Logs in to home portal
-5. Navigates to page with downloads
-6. Downloads documents from page
+### Packages
+Package requirements can be found in the requirement.txt file. First make sure that pip is installed, and then simply call the command `pip install -r requirements.txt`. 
 
-	6.1. Checks if it is on the translation or certification page
-	6.2. Gets the filename and checks if the file has been downloaded before using a text file
-	
-    if the filename doesn't match a filename in the json file:
-	6.3. Downloads the file to the downloads folder
-	6.4. Moves the downloaded file to it's corresponding language folder
-	6.5. Writes the filename to the json file.
-	
-    else:
-	6.3. Skips to the next file and repeats process starting at step 6.1.
+The Cleissinator uses geckodriver as its default driver. The location of geckodriver.exe is specified in the project's main.py file when defining the driver's `executable_path` parameter:
+
+```python
+driver = webdriver.Firefox(firefox_profile=profile, options=options, executable_path=r'./driver/geckodriver.exe')
+```
+
+The .exe file is already located within the project's root directory under driver/geckodriver.exe. This may be moved to another location so long as you specify the new location of the .exe file in the driver's `executable_path` parameter.
+
+## Settings
+In order to keep all of your environment variables in one, secure place, it's best to create a settings.py file in the projects root directory.
+
+Your settings.py file should include the following variables to get the Cleissinator up and running:
+
+* HOMEPATH
+* DOWNLOAD_DIR
+* LOGIN_CREDS
+* FOLDERNAME_DICT
+* TEST
+
+#### HOMEPATH / DOWNLOAD_DIR
+`HOMEPATH` sets the base directory on top of which `DOWNLOAD_DIR` is built. It is not necessary, but you must specify the location where geckodriver will direct your downloaded files. Therefore, if you do not include it, you must make sure that `DOWNLOAD_DIR` represents the complete path to the folder on your computer where downloads will go.
+
+#### FOLDERNAME_DICT
+This should be a python dictionary where the keys are languages and values are folder names.
+
+Prior to running geckodriver, the Cleissinator will populate the `DOWNLOAD_DIR` with empty folders specified by the values of the `FOLDERNAME_DICT`
+
+For example, a FOLDERNAME_DICT such as...
+
+```python
+FOLDERNAME_DICT = {
+	'latin': ['LATIN-Trans', 'LATIN-Rev'],
+	'sumerian': ['SUMERIAN-Trans', 'SUMERIAN-Rev'],
+}
+``` 
+
+...will create the following folder structure:
+
+```bash
+├───DOWNLOAD_DIR
+│   ├───LATIN-Trans
+│   ├───LATIN-Rev
+│   ├───SUMERIAN-Trans
+│   ├───SUMERIAN-Rev
+```
 
