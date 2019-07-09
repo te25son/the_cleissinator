@@ -15,6 +15,8 @@ driver = webdriver.Firefox(firefox_profile=profile, options=options, executable_
 
 The .exe file is already located within the project's root directory under driver/geckodriver.exe. This may be moved to another location so long as you specify the new location of the .exe file in the driver's `executable_path` parameter.
 
+*.exe is only to be used for Windows systems. For other OSs, please download from the [latest releases](https://github.com/mozilla/geckodriver/releases). In fact, it's best to download directly from this link even if you're currently operating windows, as the .exe file included in this project may be out of date.* 
+
 ## Settings
 In order to keep all of your environment variables in one, secure place, it's best to create a settings.py file in the projects root directory.
 
