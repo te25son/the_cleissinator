@@ -25,11 +25,11 @@ def main():
     profile.set_preference("browser.download.dir", settings.DOWNLOAD_DIR)
     profile.set_preference("pref.downloads.disable_button.edit_actions", True)
     profile.set_preference("browser.download.manager.showWhenStarting", False)
-    profile.set_preference("browser.helperApps.neverAsk.openFile", 
+    profile.set_preference("browser.helperApps.neverAsk.openFile",
                            "application/pdf")
-    profile.set_preference("browser.helperApps.neverAsk.openFile", 
+    profile.set_preference("browser.helperApps.neverAsk.openFile",
                            "application/octet-stream,application/pdf,application/x-pdf,application/vnd.pdf")
-    profile.set_preference("browser.helperApps.neverAsk.saveToDisk", 
+    profile.set_preference("browser.helperApps.neverAsk.saveToDisk",
                            "application/octet-stream,application/pdf,application/x-pdf,application/vnd.pdf")
     options = webdriver.FirefoxOptions()
 
@@ -37,9 +37,12 @@ def main():
     if settings.TEST == False:
         options.add_argument('-headless')
 
-    driver = webdriver.Firefox(firefox_profile=profile, 
-                               options=options, 
-                               executable_path=r'./driver/geckodriver.exe')
+    driver = webdriver.Firefox(
+        firefox_profile=profile,
+        options=options,
+        executable_path=r'./driver/geckodriver.exe',
+    )
+
     TheCleissinator = cnator(
         driver,
         60,

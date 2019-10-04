@@ -85,13 +85,13 @@ class Cleissinator:
         return max(
             [file for file in os.listdir(self.download_dir) if '.pdf' in file],
             key=lambda file_name_only: os.path.getctime(
-                os.path.join(self.download_dir + '\\', file_name_only)
+                os.path.join(self.download_dir, file_name_only)
             )
         )
 
     def most_recent_download_size_is_zero(self):
         most_recent_download = self.get_most_recently_downloaded_file()
-        if os.stat(os.path.join(self.download_dir + '\\' + most_recent_download)).st_size == 0:
+        if os.stat(os.path.join(self.download_dir, most_recent_download)).st_size == 0:
             return True
         else:
             return False
@@ -109,18 +109,18 @@ class Cleissinator:
 
         if lang in self.folder_dict.keys():
             if local == 'trans':
-                move_to_folder = self.download_dir + '\\' + self.folder_dict[lang][0]
+                move_to_folder = os.path.join(self.download_dir, self.folder_dict[lang][0])
             else:
-                move_to_folder = self.download_dir + '\\' + self.folder_dict[lang][1]
+                move_to_folder = os.path.join(self.download_dir, self.folder_dict[lang][1])
         else:
-            move_to_folder = self.download_dir + '\\GARBAGE_FILES'
+            move_to_folder = os.path.join(self.download_dir, 'MISC_FILES')
         try:
             shutil.move(
-                os.path.join(self.download_dir + '\\', most_recent_download),
+                os.path.join(self.download_dir, most_recent_download),
                 os.path.join(move_to_folder, newfilename)
             )
         except:
-            os.remove(os.path.join(self.download_dir + '\\', most_recent_download))
+            os.remove(os.path.join(self.download_dir, most_recent_download))
 
     def download_documents_from_page(self):
         rows = self.driver.find_elements_by_tag_name('tr')[1:]
