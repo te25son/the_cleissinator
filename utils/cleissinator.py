@@ -29,7 +29,7 @@ class Cleissinator:
         self.wait = WebDriverWait(self.driver, wait_time)
         self.json_filename = 'files_database.json'
 
-        setup_logger('daily_log', 'daily_log.log', mode='w')
+        setup_logger('daily_log', 'daily_log.log', mode='w')  # write mode to overwrite previous file
         setup_logger('full_log', 'full_log.log')
 
         self.daily_log = logging.getLogger('daily_log')
@@ -168,9 +168,9 @@ class Cleissinator:
                         self.full_log.info(f"Clicking on file {filename}")
 
                         doc.click()
-                        success = self.move_and_rename_downloaded_file_as_translation(type, lang, local)
+                        file_move_success = self.move_and_rename_downloaded_file_as_translation(type, lang, local)
 
-                        if success:
+                        if file_move_success:
                             # only write file to json if file successfully moved to correct folder
                             self.write_download_to_json_file(self.json_filename, filename)
 
