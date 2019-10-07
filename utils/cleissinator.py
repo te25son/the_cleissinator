@@ -3,6 +3,8 @@ import json
 import shutil
 import requests
 import time as t
+import logging
+from datetime import datetime
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,6 +13,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+
+from .logger import setup_logger
 
 
 class Cleissinator:
@@ -24,6 +28,12 @@ class Cleissinator:
         self.folder_dict = folder_dict
         self.wait = WebDriverWait(self.driver, wait_time)
         self.json_filename = 'files_database.json'
+
+        setup_logger('daily_log', 'daily_log.log', mode='w')
+        setup_logger('full_log', 'full_log.log')
+
+        self.daily_log = logging.getLogger('daily_log')
+        self.full_log = logging.getLogger('full_log')
 
     def open_url(self):
         self.driver.get(self.url)
@@ -107,6 +117,8 @@ class Cleissinator:
         most_recent_download = self.get_most_recently_downloaded_file()
         newfilename = type + lang + '_' + most_recent_download
 
+        self.full_log.info(f"Downloaded file {most_recent_download}")
+
         if lang in self.folder_dict.keys():
             if local == 'trans':
                 move_to_folder = os.path.join(self.download_dir, self.folder_dict[lang][0])
@@ -119,8 +131,15 @@ class Cleissinator:
                 os.path.join(self.download_dir, most_recent_download),
                 os.path.join(move_to_folder, newfilename)
             )
+            self.full_log.info(f"Moved {most_recent_download} to {move_to_folder} and renamed as {newfilename}")
+
+            return True
+
         except:
+            self.full_log.error(f"Failed to move {most_recent_download} to {move_to_folder}")
             os.remove(os.path.join(self.download_dir, most_recent_download))
+
+            return False
 
     def download_documents_from_page(self):
         rows = self.driver.find_elements_by_tag_name('tr')[1:]
@@ -145,9 +164,22 @@ class Cleissinator:
 
                     self.driver.execute_script('arguments[0].scrollIntoView()', doc)
                     if self.file_has_not_been_previously_downloaded(filename):
+
+                        self.full_log.info(f"Clicking on file {filename}")
+
                         doc.click()
-                        self.move_and_rename_downloaded_file_as_translation(type, lang, local)
-                        self.write_download_to_json_file(self.json_filename, filename)
+                        success = self.move_and_rename_downloaded_file_as_translation(type, lang, local)
+
+                        if success:
+                            # only write file to json if file successfully moved to correct folder
+                            self.write_download_to_json_file(self.json_filename, filename)
+
+                            self.daily_log.info(f"Successfully downloaded file {filename}")
+                            self.full_log.info(f"Successfully downloaded file {filename}")
+                        else:
+                            self.daily_log.error(f"Unable to download file {filename}")
+                            self.full_log.error(f"Unable to download file {filename}")
+
                     else:
                         pass
                     if (row + 1) == len(rows) and local != 'certs':
@@ -183,6 +215,8 @@ class Cleissinator:
                 else:
                     datastore['filename'].append(arg)
                     write_data_to_json(datastore)
+
+                    self.full_log.info(f"{arg} appended to database")
 
         append_to_data_set(filename)
 
