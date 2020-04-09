@@ -40,7 +40,7 @@ def main():
     driver = webdriver.Firefox(
         firefox_profile=profile,
         options=options,
-        executable_path=r'./driver/geckodriver.exe',
+        # executable_path=r'./driver/geckodriver.exe',
     )
 
     TheCleissinator = cnator(
